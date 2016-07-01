@@ -75,6 +75,10 @@ angular.module("ManageBookApp").controller('ProjectCtrl', ['$scope', '$routePara
                     'Content-Type': 'application/json'
                 }
             }).success(function (data) {
+                angular.element(document.querySelector('#checkIconAdd')).css('visibility', 'visible');
+                $timeout(function () {
+                    angular.element(document.querySelector('#checkIconAdd')).css('visibility', 'hidden');
+                }, 3000);
                 $scope.newProject.Priority = $scope.priorities[0].value;
                 $scope.newProject.Name = '';
                 $scope.newProject.Invoice = 0;

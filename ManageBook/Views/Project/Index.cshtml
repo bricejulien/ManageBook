@@ -102,9 +102,13 @@
                            ng-model="Invoice" placeholder="Invoice" ng-init="Invoice=0">
                 </td>
                 <td>
-                    <input type="submit" value="Add" class="btn btn-default" />
+                    <input type="submit" value="Add" class="btn btn-default" ng-show="(Name.length > 0)"
+                           ng-disabled="(Name.length > 0)" />
                 </td>
-                <td></td>
+                <td>
+                    <i class="fa fa-check checkIcon" id="checkIconAdd"
+                       aria-hidden="true" style="color:#4CAF50; visibility:hidden;"></i>
+                </td>
             </form>
         </tr>
         <tr ng-repeat="project in allProjects | orderBy:sortType:sortReverse"

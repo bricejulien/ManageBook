@@ -167,9 +167,14 @@
                            id="Invoiced" name="Invoiced" type="checkbox" value="true" ng-model="Invoiced">
                 </td>
                 <td>
-                    <input type="submit" value="Add" class="btn btn-default" />
+                    <input type="submit" value="Add" class="btn btn-default"
+                           ng-show="(UserId.length > 1 && Description.length > 0)"
+                           ng-disabled="!(UserId.length > 1 && Description.length > 0)" />
                 </td>
-                <td></td>
+                <td>
+                    <i class="fa fa-check checkIcon" id="checkIconAdd"
+                       aria-hidden="true" style="color:#4CAF50; visibility:hidden;"></i>
+                </td>
             </form>
         </tr>
         <tr ng-repeat="company in companies | orderBy:sortType:sortReverse" @*ng-style="company.Invoiced && {'background-color':'rgb(240, 248, 255)'}"*@ ng-style="company.Invoiced ? { 'background-color':'rgb(240, 248, 255)' } : { 'background-color': '#ffffff' }">

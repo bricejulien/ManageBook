@@ -88,6 +88,10 @@ angular.module("ManageBookApp").controller('EntryCtrl', ['$scope', '$routeParams
                     'Content-Type': 'application/json'
                 }
             }).success(function (data) {
+                angular.element(document.querySelector('#checkIconAdd')).css('visibility', 'visible');
+                $timeout(function () {
+                    angular.element(document.querySelector('#checkIconAdd')).css('visibility', 'hidden');
+                }, 3000);
                 $scope.newEntry.Priority = 0;
                 $scope.newEntry.Description = "";
                 $scope.newEntry.UserId = "";
