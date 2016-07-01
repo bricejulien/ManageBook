@@ -1096,6 +1096,7 @@
     <Content Include="Views\Entry\Index - Copy.cshtml" />
     <Content Include="Views\Entry\Index - Copy %282%29.cshtml" />
     <Content Include="Views\Project\Details.cshtml" />
+    <Content Include="Views\Project\Index - last working.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1115,7 +1116,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="js\EntryCtrl.ts" />
     <TypeScriptCompile Include="js\ManageBookApp.ts" />
+    <TypeScriptCompile Include="js\ProjectCtrl.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

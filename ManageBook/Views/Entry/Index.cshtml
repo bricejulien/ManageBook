@@ -1,4 +1,5 @@
-﻿<table class="table">
+﻿<div  ng-controller="EntryCtrl">
+<table class="table">
     <tr>
         <th></th>
         <th></th>
@@ -289,7 +290,8 @@
     @*<div ng-repeat="entry in allEntries">
         <span ng-bind="entry.Description"></span>
     </div>*@
+</div>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

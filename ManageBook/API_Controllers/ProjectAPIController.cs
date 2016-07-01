@@ -35,18 +35,21 @@ namespace ManageBook.API_Controllers
                 return Ok(db.Projects.ToList());
             }
         }
-        /*
+        
         // GET: api/ProjectAPI/5
         [ResponseType(typeof(Project))]
         public IHttpActionResult GetProject(int id)
         {
-            Project project = db.Projects.Find(id);
-            if (project == null)
+            using(var db = new ManageBookContext())
             {
-                return NotFound();
-            }
+                Project project = db.Projects.Find(id);
+                if (project == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(project);
+                return Ok(project);
+            }
         }
 
         // PUT: api/ProjectAPI/5
@@ -63,21 +66,24 @@ namespace ManageBook.API_Controllers
                 return BadRequest();
             }
 
-            db.Entry(project).State = EntityState.Modified;
+            using(var db = new ManageBookContext())
+            {
+                db.Entry(project).State = EntityState.Modified;
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProjectExists(id))
+                try
                 {
-                    return NotFound();
+                    db.SaveChanges();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!ProjectExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
 
@@ -93,8 +99,11 @@ namespace ManageBook.API_Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Projects.Add(project);
-            db.SaveChanges();
+            using(var db = new ManageBookContext())
+            {
+                db.Projects.Add(project);
+                db.SaveChanges();
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = project.Id }, project);
         }
@@ -103,18 +112,21 @@ namespace ManageBook.API_Controllers
         [ResponseType(typeof(Project))]
         public IHttpActionResult DeleteProject(int id)
         {
-            Project project = db.Projects.Find(id);
-            if (project == null)
+            using(var db = new ManageBookContext())
             {
-                return NotFound();
+                Project project = db.Projects.Find(id);
+                if (project == null)
+                {
+                    return NotFound();
+                }
+
+                db.Projects.Remove(project);
+                db.SaveChanges();
+
+                return Ok(project);
             }
-
-            db.Projects.Remove(project);
-            db.SaveChanges();
-
-            return Ok(project);
         }
-
+        /*
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -122,11 +134,14 @@ namespace ManageBook.API_Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }*/
 
         private bool ProjectExists(int id)
         {
-            return db.Projects.Count(e => e.Id == id) > 0;
-        }*/
+            using(var db = new ManageBookContext())
+            {
+                return db.Projects.Count(e => e.Id == id) > 0;
+            }
+        }
     }
 }

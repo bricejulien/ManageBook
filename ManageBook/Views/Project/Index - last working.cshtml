@@ -1,0 +1,190 @@
+﻿@model IList<ManageBookModels.Project>
+
+@{
+    ViewBag.Title = "Index";
+
+    var users = ViewBag.Users;
+
+    var listUsers = new List<SelectListItem>();
+    foreach (var user in users)
+    {
+        listUsers.Add(new SelectListItem() { Text = user.UserName, Value = user.Id.ToString() });
+    }
+
+    var listProjects = new List<SelectListItem>();
+    foreach (var project in Model)
+    {
+        listProjects.Add(new SelectListItem() { Text = project.Name, Value = project.Id.ToString() });
+    }
+}
+
+@*<h2>Index</h2>*@
+
+@*<table class="table">
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    @using (Html.BeginForm("Filter", "Entry", FormMethod.Post))
+    {
+        <tr>
+            <td>
+                @Html.DropDownList("Text",listProjects, "All", new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.DropDownList("Text", listUsers, "All", new { @class = "form-control" })
+            </td>
+            <td>
+                <input type="submit" value="Filter" class="btn btn-default" />
+            </td>
+        </tr>
+    }
+</table>*@
+
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Priority)*@
+            Priority
+        </th>
+        <th>
+            @Html.DisplayName("Client")
+        </th>
+        <th>
+            @Html.DisplayName("Contact")
+        </th>
+        <th>
+            @Html.DisplayName("Number")
+        </th>
+        <th>
+            @Html.DisplayName("QuickBook Id")
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Retainer)*@
+            Retainer
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Actions)*@
+            Actions
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Contacts)*@
+            Contacts
+        </th>
+        <th>
+            @Html.DisplayName("Hours")
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.ActualHours)
+        </th>*@
+        <th>
+            @*@Html.DisplayNameFor(model => model.Invoice)*@
+            Invoice
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    using (Html.BeginForm("Edit", "Project", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Id)
+        <tr>
+            <td class="form-group">
+                @{
+                    var listPriorities = new SelectList(new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "X", Value="0"},
+                        new SelectListItem() {Text = "1", Value="1"},
+                        new SelectListItem() {Text = "2", Value="2"},
+                        new SelectListItem() {Text = "3", Value="3"},
+                        new SelectListItem() {Text = "!!!", Value="4"}
+                    },
+                    "Value", // property to be set as Value of dropdown item
+                    "Text",  // property to be used as text of dropdown item
+                    item.Priority.ToString());
+                }
+                @Html.DropDownListFor(m => m.First(x => x.Id == item.Id).Priority, listPriorities, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Priority, "", new { @class = "text-danger" })
+            </td>
+            <td class="form-group">
+                @*<a href="/Project/Details/@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Name, "", new { @class = "text-danger" })
+            </td>
+            <td class="form-group">
+                @*@Html.DisplayFor(modelItem => item.ContactPerson)*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).ContactPerson, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).ContactPerson, "", new { @class = "text-danger" })
+            </td>
+            <td class="form-group">
+                @*@Html.DisplayFor(modelItem => item.PhoneNumber)*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).PhoneNumber, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.First(x => x.Id == item.Id).QuickbookId)
+                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).QuickbookId)
+            </td>
+            <td>
+                @if (item.Retainer)
+                {
+                    @Html.Raw("YES")
+                }
+                else
+                {
+                    @Html.Raw("NO")
+                }
+                @*@Html.DisplayFor(modelItem => item.Retainer)*@
+                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Retainer)
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.First(x => x.Id == item.Id).Actions)
+                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Actions)
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.First(x => x.Id == item.Id).Contacts)
+                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Contacts)
+            </td>
+            <td>
+                @item.ActualHours/@item.ExpectedHours
+                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).ActualHours)
+                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).ExpectedHours)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.ActualHours)
+                </td>*@
+            <td>
+                <a href="/Project/Details/@item.Id">$@item.Invoice.ToString("#,##0.00")</a>
+                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Invoice)
+            </td>
+            <td class="form-group">
+                @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
+                <input type="submit" value="Save" class="btn btn-default" />
+                @*@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })*@
+                @*<button class="btn btn-default" ng-click="detailsProject(@item.Id)">Details</button>*@
+                <a class="btn btn-default" href="~/Entry?projectid=@item.Id">Details</a>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
+}
+
+</table>
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default pull-right" })
+</p>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    function RedirectMe(id) {
+        //window.location = "http://www.google.com";
+        //return false;
+    }
+</script>

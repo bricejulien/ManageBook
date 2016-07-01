@@ -1,190 +1,155 @@
-﻿@model IList<ManageBookModels.Project>
+﻿<div ng-controller="ProjectCtrl">
 
-@{
-    ViewBag.Title = "Index";
-
-    var users = ViewBag.Users;
-
-    var listUsers = new List<SelectListItem>();
-    foreach (var user in users)
-    {
-        listUsers.Add(new SelectListItem() { Text = user.UserName, Value = user.Id.ToString() });
-    }
-
-    var listProjects = new List<SelectListItem>();
-    foreach (var project in Model)
-    {
-        listProjects.Add(new SelectListItem() { Text = project.Name, Value = project.Id.ToString() });
-    }
-}
-
-@*<h2>Index</h2>*@
-
-@*<table class="table">
-    <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
-    @using (Html.BeginForm("Filter", "Entry", FormMethod.Post))
-    {
+    <table class="table" style="background-color: #f9f9f9;" @*class="table table-striped" style="background-color: #DCDCDC;"*@>
         <tr>
+            <th>
+                <span ng-click="sortType = 'Priority'; sortReverse = !sortReverse">Priority</span>
+                <span ng-show="sortType == 'Priority' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Priority' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Name'; sortReverse = !sortReverse">Client</span>
+                <span ng-show="sortType == 'Name' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Name' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Contact'; sortReverse = !sortReverse">Contact</span>
+                <span ng-show="sortType == 'Contact' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Contact' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'PhoneNumber'; sortReverse = !sortReverse">Number</span>
+                <span ng-show="sortType == 'PhoneNumber' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'PhoneNumber' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'QuickbookId'; sortReverse = !sortReverse">QuickBook Id</span>
+                <span ng-show="sortType == 'QuickbookId' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'QuickbookId' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Retainer'; sortReverse = !sortReverse">Retainer</span>
+                <span ng-show="sortType == 'Retainer' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Retainer' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Actions'; sortReverse = !sortReverse">Actions</span>
+                <span ng-show="sortType == 'Actions' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Actions' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Contacts'; sortReverse = !sortReverse">Contacts</span>
+                <span ng-show="sortType == 'Contacts' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Contacts' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Hours'; sortReverse = !sortReverse">Hours</span>
+                <span ng-show="sortType == 'Hours' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Hours' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Invoice'; sortReverse = !sortReverse">Invoice</span>
+                <span ng-show="sortType == 'Invoice' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Invoice' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <button class="btn btn-default" ng-click="toggleShowRow()">New Project</button>
+            </th>
+            <th></th>
+        </tr>
+        <tr style="background-color: rgb(240, 248, 255);" ng-show="showRowNewProject">
+            <form class="form-horizontal" role="form" ng-submit="addRow()">
+                <td>
+                    <select class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
+                        <option style="display:none" value=""></option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" id="Name" name="Name" type="text"
+                           value="" ng-model="Name" placeholder="Client">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" id="ContactPerson" name="ContactPerson" type="text"
+                           value="" ng-model="ContactPerson" placeholder="Contact">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" id="PhoneNumber" name="PhoneNumber" type="text"
+                           value="" ng-model="PhoneNumber" placeholder="Number">
+                </td>
+                <td class="form-group" style="width: 150px">
+                    <input class="form-control text-box single-line" id="QuickbookId" name="QuickbookId"
+                           type="text" ng-model="QuickbookId" placeholder="QuickBook Id" ng-init="QuickbookId=0">
+                </td>
+                <td>
+                    <input checked="checked" class="check-box" id="Retainer" name="Retainer" type="checkbox"
+                           value="true" ng-model="Retainer">
+                </td>
+                <td style="width: 150px">
+                    <input class="form-control text-box single-line"  id="Actions" name="Actions" type="text"
+                           ng-model="Actions" placeholder="Actions" ng-init="Actions=0">
+                </td>
+                <td style="width: 150px">
+                    <input class="form-control text-box single-line" id="Contacts" name="Contacts" type="text"
+                           ng-model="Contacts" placeholder="Contacts" ng-init="Contacts=0">
+                </td>
+                <td style="width: 150px">
+                    <input class="form-control text-box single-line" id="ExpectedHours" name="ExpectedHours" type="text"
+                           ng-model="ExpectedHours" placeholder="Expected Hours" ng-init="ExpectedHours=0">
+                    <input type="hidden" id="ActualHours" name="ActualHours" ng-model="ActualHours" ng-init="ActualHours=0" />
+                </td>
+                <td style="width: 150px">
+                    <input class="form-control text-box single-line" id="Invoice" name="Invoice" type="text"
+                           ng-model="Invoice" placeholder="Invoice" ng-init="Invoice=0">
+                </td>
+                <td>
+                    <input type="submit" value="Add" class="btn btn-default" />
+                </td>
+                <td></td>
+            </form>
+        </tr>
+        <tr ng-repeat="project in allProjects | orderBy:sortType:sortReverse"
+            ng-style="(project.Priority==4) ? { 'background-color':'rgb(240, 248, 255)' } : { 'background-color': '#ffffff' }">
             <td>
-                @Html.DropDownList("Text",listProjects, "All", new { @class = "form-control" })
+                <select class="form-control" ng-model="selectedPriority"
+                        ng-options="priority.name for priority in priorities"
+                        ng-change="changeValuePriority(project.Id,selectedPriority.value)">
+                    <option ng-value="project.Priority" ng-bind="getPriorityName(project.Priority)" style="display:none;"></option>
+                </select>
             </td>
             <td>
-                @Html.DropDownList("Text", listUsers, "All", new { @class = "form-control" })
+                <input class="form-control text-box single-line" id="Name" name="Name" type="text"
+                       ng-value="project.Name" ng-model="project.Name">
             </td>
             <td>
-                <input type="submit" value="Filter" class="btn btn-default" />
+                <input class="form-control text-box single-line" id="ContactPerson" name="ContactPerson" type="text"
+                       ng-value="project.ContactPerson" ng-model="project.ContactPerson">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" id="PhoneNumber" name="PhoneNumber" type="text"
+                       ng-value="project.PhoneNumber" ng-model="project.PhoneNumber">
+            </td>
+            <td ng-bind="project.QuickbookId"></td>
+            <td ng-show="project.Retainer">YES</td>
+            <td ng-show="!(project.Retainer)">NO</td>
+            <td ng-bind="project.Actions"></td>
+            <td ng-bind="project.Contacts"></td>
+            <td>{{project.ActualHours}}/{{project.ExpectedHours}}</td>
+            <td ng-bind="project.Invoice | currency"></td>
+            <td>
+                <button class="btn btn-default btn-blue" ng-click="saveProject(project.Id)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                @*<a class="btn btn-default" href="/Project/Edit/{{project.Id}}">Edit</a>*@
+                <a class="btn btn-default btn-blue" href="/Project/Details/{{project.Id}}">Details</a>
+                <a class="btn btn-default btn-blue" href="/Project/Delete/{{project.Id}}">@*<i class="fa fa-trash-o" aria-hidden="true"></i>*@Delete</a>
+                @*<input type="submit" value="Save" class="btn btn-default" />*@
+            </td>
+            <td>
+                <i id="checkIcon{{project.Id}}" class="fa fa-check checkIcon"
+                   aria-hidden="true" style="color:#4CAF50; visibility:hidden;"></i>
             </td>
         </tr>
-    }
-</table>*@
-
-<table class="table">
-    <tr>
-        <th>
-            @*@Html.DisplayNameFor(model => model.Priority)*@
-            Priority
-        </th>
-        <th>
-            @Html.DisplayName("Client")
-        </th>
-        <th>
-            @Html.DisplayName("Contact")
-        </th>
-        <th>
-            @Html.DisplayName("Number")
-        </th>
-        <th>
-            @Html.DisplayName("QuickBook Id")
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.Retainer)*@
-            Retainer
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.Actions)*@
-            Actions
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.Contacts)*@
-            Contacts
-        </th>
-        <th>
-            @Html.DisplayName("Hours")
-        </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.ActualHours)
-        </th>*@
-        <th>
-            @*@Html.DisplayNameFor(model => model.Invoice)*@
-            Invoice
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model)
-{
-    using (Html.BeginForm("Edit", "Project", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Id)
-        <tr>
-            <td class="form-group">
-                @{
-                    var listPriorities = new SelectList(new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "X", Value="0"},
-                        new SelectListItem() {Text = "1", Value="1"},
-                        new SelectListItem() {Text = "2", Value="2"},
-                        new SelectListItem() {Text = "3", Value="3"},
-                        new SelectListItem() {Text = "!!!", Value="4"}
-                    },
-                    "Value", // property to be set as Value of dropdown item
-                    "Text",  // property to be used as text of dropdown item
-                    item.Priority.ToString());
-                }
-                @Html.DropDownListFor(m => m.First(x => x.Id == item.Id).Priority, listPriorities, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Priority, "", new { @class = "text-danger" })
-            </td>
-            <td class="form-group">
-                @*<a href="/Project/Details/@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>*@
-                @Html.EditorFor(m => m.First(x => x.Id == item.Id).Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Name, "", new { @class = "text-danger" })
-            </td>
-            <td class="form-group">
-                @*@Html.DisplayFor(modelItem => item.ContactPerson)*@
-                @Html.EditorFor(m => m.First(x => x.Id == item.Id).ContactPerson, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).ContactPerson, "", new { @class = "text-danger" })
-            </td>
-            <td class="form-group">
-                @*@Html.DisplayFor(modelItem => item.PhoneNumber)*@
-                @Html.EditorFor(m => m.First(x => x.Id == item.Id).PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).PhoneNumber, "", new { @class = "text-danger" })
-            </td>
-            <td>
-                @Html.DisplayFor(m => m.First(x => x.Id == item.Id).QuickbookId)
-                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).QuickbookId)
-            </td>
-            <td>
-                @if (item.Retainer)
-                {
-                    @Html.Raw("YES")
-                }
-                else
-                {
-                    @Html.Raw("NO")
-                }
-                @*@Html.DisplayFor(modelItem => item.Retainer)*@
-                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Retainer)
-            </td>
-            <td>
-                @Html.DisplayFor(m => m.First(x => x.Id == item.Id).Actions)
-                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Actions)
-            </td>
-            <td>
-                @Html.DisplayFor(m => m.First(x => x.Id == item.Id).Contacts)
-                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Contacts)
-            </td>
-            <td>
-                @item.ActualHours/@item.ExpectedHours
-                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).ActualHours)
-                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).ExpectedHours)
-            </td>
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.ActualHours)
-                </td>*@
-            <td>
-                <a href="/Project/Details/@item.Id">$@item.Invoice.ToString("#,##0.00")</a>
-                @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Invoice)
-            </td>
-            <td class="form-group">
-                @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
-                <input type="submit" value="Save" class="btn btn-default" />
-                @*@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })*@
-                @*<button class="btn btn-default" ng-click="detailsProject(@item.Id)">Details</button>*@
-                <a class="btn btn-default" href="~/Entry?projectid=@item.Id">Details</a>
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
-            </td>
-        </tr>
-    }
-}
-
-</table>
-<p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default pull-right" })
-</p>
+    </table>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-
-<script type="text/javascript">
-    function RedirectMe(id) {
-        //window.location = "http://www.google.com";
-        //return false;
-    }
-</script>
