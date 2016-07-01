@@ -1,0 +1,108 @@
+﻿@using ManageBook.Models;
+@model ManageBookModels.Entry
+
+@{
+    ViewBag.Title = "Details";
+
+    var user = new ApplicationUser();
+    using (var db = new ApplicationDbContext())
+    {
+        user = db.Users.Find(Model.UserId);
+    }
+
+    var projects = ViewBag.Projects;
+
+    var listProjects = new List<SelectListItem>();
+    foreach (var project in projects)
+    {
+        listProjects.Add(new SelectListItem() { Text = project.Name, Value = project.Id.ToString() });
+    }
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Entry</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Project")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Priority)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Priority)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Information)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Information)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Who")
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.UserId)*@
+            @user.UserName
+            @*@Html.DisplayFor(model => model.User.UserName)*@
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.Date)*@
+            @Model.Date.ToString("MM/dd/yyyy")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InvoicableHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InvoicableHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Invoiced)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Invoiced)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

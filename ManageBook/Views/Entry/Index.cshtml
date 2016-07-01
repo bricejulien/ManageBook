@@ -1,0 +1,295 @@
+﻿<table class="table">
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>
+            <select class="form-control" ng-model="filteredProject"
+                    ng-options="project.Name for project in allProjects">
+                <option value="">All</option>
+                <option ng-value="project.Id" ng-bind="getProjectName(project.Id)"></option>
+            </select>
+        </td>
+        @*<td ng-bind="filteredProject.Name"></td>*@
+        <td>
+            <select class="form-control" ng-model="filteredUser"
+                    ng-options="user.UserName for user in allUsers">
+                <option value="">All</option>
+                <option ng-value="user.Id" ng-bind="getUserName(user.Id)"></option>
+            </select>
+        </td>
+        @*<td ng-bind="filteredUser.UserName"></td>*@
+        <td class="form-group">
+            <label for="filterStartDate">From</label>
+            <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date."
+                   data-val-required="The Date field is required."
+                   id="filterStartDate" name="filterStartDate" type="date"
+                   value="" ng-model="filteredStartDate">
+        </td>
+        @*<td ng-bind="filteredStartDate | date:'MM/dd/yyyy' "></td>*@
+        <td class="form-group">
+            <label for="filterEndDate">To</label>
+            <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date."
+                   data-val-required="The Date field is required."
+                   id="filterEndDate" name="filterEndDate" type="date" value=""
+                   ng-model="filteredEndDate">
+        </td>
+        <td>
+            <label for="filterPriorityA">X</label>
+            <input ng-init="filterPriorityA=true" class="check-box" id="filterPriorityA" name="filterPriorityA" type="checkbox" ng-value="true" 
+                   ng-model="filterPriorityA">
+        </td>
+        <td>
+            <label for="filterPriorityB">1</label>
+            <input ng-init="filterPriorityB=true" class="check-box" id="filterPriorityB" name="filterPriorityB" type="checkbox" value="0" 
+                   ng-model="filterPriorityB">
+        </td>
+        <td>
+            <label for="filterPriorityC">2</label>
+            <input ng-init="filterPriorityC=true" class="check-box" id="filterPriorityC" name="filterPriorityC" type="checkbox" value="0"
+                    ng-model="filterPriorityC">
+        </td>
+        <td>
+            <label for="filterPriorityD">3</label>
+            <input ng-init="filterPriorityD=true" class="check-box" id="filterPriorityD" name="filterPriorityD" type="checkbox" value="0" 
+                   ng-model="filterPriorityD">
+        </td>
+        <td>
+            <label for="filterPriorityE">!!!</label>
+            <input ng-init="filterPriorityE=true" class="check-box" id="filterPriorityE" name="filterPriorityE" type="checkbox" value="0"
+                    ng-model="filterPriorityE">
+        </td>
+        <td>
+            <button class="btn btn-default"
+                    ng-click="filterEntries(filteredProject.Id,filteredUser.Id,filteredStartDate,filteredEndDate,
+                    filterPriorityA,filterPriorityB,filterPriorityC,filterPriorityD,filterPriorityE)">Filter</button>
+        </td>
+    </tr>
+</table>
+
+<!-- TEST ANGULAR -->
+
+    <table class="table" style="background-color: #f9f9f9;" @*class="table table-striped" style="background-color: #DCDCDC;"*@>
+        <tr>
+            <th>
+                <span ng-click="sortType = 'Priority'; sortReverse = !sortReverse">Priority</span>
+                <span ng-show="sortType == 'Priority' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Priority' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Description'; sortReverse = !sortReverse">To Do</span>
+                <span ng-show="sortType == 'Description' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Description' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'UserId'; sortReverse = !sortReverse">Who</span>
+                <span ng-show="sortType == 'UserId' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'UserId' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'ProjectId'; sortReverse = !sortReverse">Project</span>
+                <span ng-show="sortType == 'ProjectId' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'ProjectId' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Date'; sortReverse = !sortReverse">Date</span>
+                <span ng-show="sortType == 'Date' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Date' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'InvoicableHours'; sortReverse = !sortReverse">Hours Invoicable</span>
+                <span ng-show="sortType == 'InvoicableHours' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'InvoicableHours' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'ActualHours'; sortReverse = !sortReverse">Hours Actual</span>
+                <span ng-show="sortType == 'ActualHours' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'ActualHours' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <span ng-click="sortType = 'Invoiced'; sortReverse = !sortReverse">Invoiced</span>
+                <span ng-show="sortType == 'Invoiced' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Invoiced' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>
+                <button class="btn btn-default" ng-click="toggleShowRow()">New Entry</button>
+            </th>
+            <th></th>
+        </tr>
+        <tr style="background-color: rgb(240, 248, 255);" ng-show="showRowNewEntry">
+            <form class="form-horizontal" role="form" ng-submit="addRow()">
+                <td>
+                    <select class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
+                        <option style="display:none" value=""></option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" id="Description" name="Description" type="text"
+                           value="Coupon design" ng-model="Description" placeholder="Description">
+                </td>
+                <td>
+                    <select class="form-control" id="UserId" name="UserId" ng-model="UserId" ng-options="user.Id as user.UserName for user in allUsers">
+                        <option style="display:none" value="">Who</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control" id="ProjectId" name="ProjectId" ng-model="ProjectId" ng-options="project.Id as project.Name for project in allProjects">
+                        <option style="display:none" value="">Project</option>
+                    </select>
+                </td>
+                <td class="form-group">
+
+                    <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required."
+                           id="Date" name="Date" type="date" value="{{DateofToday | date:'yyyy-MM-dd'}}" ng-model="Date">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field InvoicableHours must be a number."
+                           data-val-required="The InvoicableHours field is required." id="InvoicableHours" name="InvoicableHours"
+                           type="text" ng-model="InvoicableHours" placeholder="Hours Invoicable">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field ActualHours must be a number."
+                           data-val-required="The ActualHours field is required." id="ActualHours" name="ActualHours" type="text"
+                           ng-model="ActualHours" placeholder="Hours Actual">
+                </td>
+                <td>
+                    <input checked="checked" class="check-box" data-val="true" data-val-required="The Invoiced field is required."
+                           id="Invoiced" name="Invoiced" type="checkbox" value="true" ng-model="Invoiced">
+                </td>
+                <td>
+                    <input type="submit" value="Add" class="btn btn-default" />
+                </td>
+                <td></td>
+            </form>
+        </tr>
+        <tr ng-repeat="company in companies | orderBy:sortType:sortReverse" @*ng-style="company.Invoiced && {'background-color':'rgb(240, 248, 255)'}"*@ ng-style="company.Invoiced ? { 'background-color':'rgb(240, 248, 255)' } : { 'background-color': '#ffffff' }">
+            @*<td>
+                <select ng-init="priority.value=company.Priority" class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
+                    <option style="display:none" value=""></option>
+                </select>
+            </td>*@
+            <td>
+                <select class="form-control" ng-model="selectedPriority"
+                        ng-options="priority.name for priority in priorities"
+                        ng-change="changeValuePriority(company.Id,selectedPriority.value)">
+                    <option ng-value="company.Priority" ng-bind="getPriorityName(company.Priority)" style="display:none;"></option> 
+                </select>
+            </td>
+            <td>
+                <input class="form-control text-box single-line" id="Description" name="Description" type="text"
+                       ng-value="company.Description" ng-model="company.Description">
+            </td>
+            <td>
+                @*<select class="form-control" id="UserId" name="UserId">
+                    <option ng-repeat="user in allUsers" ng-bind="getUserName(company.UserId)"></option>
+                </select>*@
+                @*<select class="form-control" id="ProjectId" name="ProjectId">
+                    <option ng-selected="company.UserId==user.Id" ng-repeat="user in allUsers"
+                            ng-bind="user.UserName" ng-model="company.UserId" ng-value="company.UserId"></option>
+                </select>*@
+                <select class="form-control" ng-model="selectedUser"
+                        ng-options="user.UserName for user in allUsers"
+                        ng-change="changeValueUserId(company.Id,selectedUser.Id)">
+                    <option ng-value="company.UserId" ng-bind="getUserName(company.UserId)" style="display:none;"></option>
+                </select>
+            </td>
+            <td>
+                @*<select class="form-control" id="ProjectId" name="ProjectId">
+                    <option ng-repeat="project in allProjects" ng-bind="getProjectName(company.ProjectId)"></option>
+                </select>*@
+                @*<select class="form-control" id="ProjectId" name="ProjectId">
+                    <option ng-selected="company.ProjectId==project.Id" ng-repeat="project in allProjects"
+                            ng-bind="project.Name" ng-model="company.ProjectId" ng-value="company.ProjectId"></option>
+                </select>*@
+                <select class="form-control" ng-model="selectedProject"
+                        ng-options="project.Name for project in allProjects"
+                        ng-change="changeValueProjectId(company.Id,selectedProject.Id)">
+                    <option ng-value="company.ProjectId" ng-bind="getProjectName(company.ProjectId)" style="display:none;"></option>
+                </select>
+            </td>
+            <td class="form-group">
+                <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required."
+                       id="Date" name="Date" type="date" value="{{company.Date | date:'yyyy-MM-dd' }}" ng-model="company.Date">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field InvoicableHours must be a number."
+                       data-val-required="The InvoicableHours field is required." id="InvoicableHours" name="InvoicableHours"
+                       type="text" ng-value="company.InvoicableHours" ng-model="company.InvoicableHours">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field ActualHours must be a number."
+                       data-val-required="The ActualHours field is required." id="ActualHours" name="ActualHours" type="text"
+                       ng-value="company.ActualHours" ng-model="company.ActualHours">
+            </td>
+            <td>
+                <input ng-checked="company.Invoiced" class="check-box" data-val-required="The Invoiced field is required."
+                       id="Invoiced" name="Invoiced" type="checkbox" value="{{company.Invoiced}}" ng-model="company.Invoiced">
+            </td>
+            <td>
+                <button class="btn btn-default btn-blue" ng-click="saveEntry(company.Id)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                @*<a class="btn btn-default" href="/Entry/Edit/{{company.Id}}">Edit</a>*@
+                <a class="btn btn-default btn-blue" href="/Entry/Details/{{company.Id}}">Details</a>
+                <a class="btn btn-default btn-blue" href="/Entry/Delete/{{company.Id}}">@*<i class="fa fa-trash-o" aria-hidden="true"></i>*@Delete</a>
+                @*<input type="submit" value="Save" class="btn btn-default" />*@
+            </td>
+            <td><i id="checkIcon{{company.Id}}" class="fa fa-check checkIcon"
+                   aria-hidden="true" style="color:#4CAF50; visibility:hidden;"></i></td>
+        </tr>
+    </table>
+
+@*<table class="table">
+    <tr>
+        <th>
+            Priority
+        </th>
+        <th>
+            To Do
+        </th>
+        <th>
+            Who
+        </th>
+        <th>
+            Project
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Hours Invoicable
+        </th>
+        <th>
+            Hours Actual
+        </th>
+        <th>
+            Invoiced
+        </th>
+    </tr>
+    <tr ng-repeat="company in companies">
+        <td ng-bind="company.Priority"></td>
+        <td ng-bind="company.Description"></td>
+        <td ng-bind="getUserName(company.UserId)"></td>
+        <td>projectname</td>
+        <td ng-bind="company.Date | date : format : mediumDate"></td>
+        <td ng-bind="company.InvoicableHours"></td>
+        <td ng-bind="company.ActualHours"></td>
+        <td ng-bind="company.Invoiced"></td>
+    </tr>
+</table>*@
+
+
+    @*<div ng-repeat="entry in allEntries">
+        <span ng-bind="entry.Description"></span>
+    </div>*@
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

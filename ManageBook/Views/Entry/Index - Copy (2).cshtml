@@ -1,0 +1,405 @@
+﻿@using ManageBook.Models;
+
+@model IList<ManageBookModels.Entry>
+
+@{
+    ViewBag.Title = "Index";
+
+    var projects = ViewBag.Projects;
+    var users = ViewBag.Users;
+
+    var listUsers = new List<SelectListItem>();
+    foreach (var user in users)
+    {
+        listUsers.Add(new SelectListItem() { Text = user.UserName, Value = user.Id.ToString() });
+    }
+
+    var listProjects = new List<SelectListItem>();
+    foreach (var project in projects)
+    {
+        listProjects.Add(new SelectListItem() { Text = project.Name, Value = project.Id.ToString() });
+    }
+}
+
+@*<h2>Index</h2>*@
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    @using (Html.BeginForm("Filter", "Entry", FormMethod.Post))
+    {
+        <tr>
+            <td>
+                @Html.DropDownList("project", listProjects, "All", new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.DropDownList("user", listUsers, "All", new { @class = "form-control" })
+            </td>
+            <td>
+                <input type="submit" value="Filter" class="btn btn-default" />
+            </td>
+        </tr>
+    }
+</table>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Priority")
+        </th>
+        <th>
+            @Html.DisplayName("To Do")
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Information)
+        </th>*@
+        <th>
+            @Html.DisplayName("Who")
+        </th>
+        <th>
+            @Html.DisplayName("Project")
+        </th>
+        <th>
+            @Html.DisplayName("Date")
+        </th>
+        <th>
+            @Html.DisplayName("Hours Invoicable")
+        </th>
+        <th>
+            @Html.DisplayName("Hours Actual")
+        </th>
+        <th>
+            @Html.DisplayName("Invoiced")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    using (Html.BeginForm("Edit", "Entry", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.First(x => x.Id == item.Id).Id)
+        <tr @*ng-repeat="entry in allEntries"*@>
+            @*<td ng-bind="entry.Priority"></td>*@
+            <td>
+                @{
+                    var listPriorities = new SelectList(new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "X", Value="0"},
+                        new SelectListItem() {Text = "1", Value="1"},
+                        new SelectListItem() {Text = "2", Value="2"},
+                        new SelectListItem() {Text = "3", Value="3"},
+                        new SelectListItem() {Text = "!!!", Value="4"}
+                    },
+                    "Value", // property to be set as Value of dropdown item
+                    "Text",  // property to be used as text of dropdown item
+                    item.Priority.ToString());
+                }
+                @Html.DropDownListFor(m => m.First(x => x.Id == item.Id).Priority, listPriorities, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Priority, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Description)*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Description, "", new { @class = "text-danger" })
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Information)
+            </td>*@
+            <td>
+                @{
+                    var dropdownUsers = new SelectList(listUsers,
+                                        "Value", // property to be set as Value of dropdown item
+                                        "Text",  // property to be used as text of dropdown item
+                                        item.UserId.ToString());
+                }
+                @Html.DropDownListFor(m => m.First(x => x.Id == item.Id).UserId, dropdownUsers, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).UserId, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.ProjectId)*@
+                @{
+                    var dropdownProjects = new SelectList(listProjects,
+                    "Value", // property to be set as Value of dropdown item
+                    "Text",  // property to be used as text of dropdown item
+                    item.ProjectId.ToString());
+                }
+                @Html.DropDownListFor(m => m.First(x => x.Id == item.Id).ProjectId, dropdownProjects, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).ProjectId, "", new { @class = "text-danger" })
+            </td>
+            <td class="form-group">
+                @*@Html.ValueFor(modelItem => item.Date, "{0:MM/dd/yyyy}")*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).Date,new { htmlAttributes = new { @class = "form-control"@*, @Value = item.Date.ToString("MM/dd/yyyy")*@ } })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Date, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.InvoicableHours)*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).InvoicableHours, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).InvoicableHours, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.ActualHours)*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).ActualHours, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).ActualHours, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Invoiced)*@
+                @Html.EditorFor(m => m.First(x => x.Id == item.Id).Invoiced)
+                @Html.ValidationMessageFor(m => m.First(x => x.Id == item.Id).Invoiced, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id })*@
+                <input type="submit" value="Save" class="btn btn-default" />
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<!-- TEST ANGULAR -->
+
+@*<form class="form-horizontal" role="form" ng-submit="addRow()">
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <select class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
+                        <option style="display:none" value=""></option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" id="Description" name="Description" type="text"
+                           value="Coupon design" ng-model="Description" placeholder="Description">
+                </td>
+                <td>
+                    <select class="form-control" id="UserId" name="UserId" ng-model="UserId" ng-options="user.Id as user.UserName for user in allUsers">
+                        <option style="display:none" value="">Who</option>
+                    </select>
+                </td>
+                <td class="form-group">
+
+                    <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required."
+                           id="Date" name="Date" type="date" value="{{DateofToday | date:'yyyy-MM-dd'}}" ng-model="Date">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field InvoicableHours must be a number."
+                           data-val-required="The InvoicableHours field is required." id="InvoicableHours" name="InvoicableHours"
+                           type="text" ng-model="InvoicableHours" placeholder="Hours Invoicable">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field ActualHours must be a number."
+                           data-val-required="The ActualHours field is required." id="ActualHours" name="ActualHours" type="text"
+                           ng-model="ActualHours" placeholder="Hours Actual">
+                </td>
+                <td>
+                    <input checked="checked" class="check-box" data-val="true" data-val-required="The Invoiced field is required."
+                           id="Invoiced" name="Invoiced" type="checkbox" value="true" ng-model="Invoiced"><label for="Invoiced">Invoiced</label>
+                </td>
+                <td>
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>*@
+
+    <table class="table">
+        <tr>
+            <th>
+                Priority
+            </th>
+            <th>
+                To Do
+            </th>
+            <th>
+                Who
+            </th>
+            <th>
+                Project
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Hours Invoicable
+            </th>
+            <th>
+                Hours Actual
+            </th>
+            <th>
+                Invoiced
+            </th>
+            <th>
+                <button class="btn btn-default" ng-click="toggleShowRow()">Show/Hide new entry</button>
+            </th>
+        </tr>
+        <tr style="background-color:cornflowerblue" ng-show="showRowNewEntry">
+            <form class="form-horizontal" role="form" ng-submit="addRow()">
+                <td>
+                    <select class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
+                        <option style="display:none" value=""></option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" id="Description" name="Description" type="text"
+                           value="Coupon design" ng-model="Description" placeholder="Description">
+                </td>
+                <td>
+                    <select class="form-control" id="UserId" name="UserId" ng-model="UserId" ng-options="user.Id as user.UserName for user in allUsers">
+                        <option style="display:none" value="">Who</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control" id="ProjectId" name="ProjectId" ng-model="ProjectId" ng-options="project.Id as project.Name for project in allProjects">
+                        <option style="display:none" value="">Project</option>
+                    </select>
+                </td>
+                <td class="form-group">
+
+                    <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required."
+                           id="Date" name="Date" type="date" value="{{DateofToday | date:'yyyy-MM-dd'}}" ng-model="Date">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field InvoicableHours must be a number."
+                           data-val-required="The InvoicableHours field is required." id="InvoicableHours" name="InvoicableHours"
+                           type="text" ng-model="InvoicableHours" placeholder="Hours Invoicable">
+                </td>
+                <td>
+                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field ActualHours must be a number."
+                           data-val-required="The ActualHours field is required." id="ActualHours" name="ActualHours" type="text"
+                           ng-model="ActualHours" placeholder="Hours Actual">
+                </td>
+                <td>
+                    <input checked="checked" class="check-box" data-val="true" data-val-required="The Invoiced field is required."
+                           id="Invoiced" name="Invoiced" type="checkbox" value="true" ng-model="Invoiced"><label for="Invoiced">Invoiced</label>
+                </td>
+                <td>
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </td>
+            </form>
+        </tr>
+        <tr ng-repeat="company in companies">
+            @*<td>
+                <select ng-init="priority.value=company.Priority" class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
+                    <option style="display:none" value=""></option>
+                </select>
+            </td>*@
+            <td>
+                <select class="form-control" id="Priority" name="Priority"
+                        @*ng-model="Priority"*@>
+                    @*<option ng-selected="true" value="0">X</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">!!!</option>*@
+                    <option ng-repeat="priority in priorities" ng-selected="priority.value==company.Priority"
+                            ng-value="priority.value" ng-bind="priority.name"></option>
+                </select>
+            </td>
+            <td>
+                <input class="form-control text-box single-line" id="Description" name="Description" type="text"
+                       ng-value="company.Description" @*ng-model="Description"*@>
+            </td>
+            <td>
+                @*<select class="form-control" id="UserId" name="UserId">
+                    <option ng-repeat="user in allUsers" ng-bind="getUserName(company.UserId)"></option>
+                </select>*@
+                <select class="form-control" id="ProjectId" name="ProjectId">
+                    <option ng-selected="company.UserId==user.Id" ng-repeat="user in allUsers" ng-bind="user.UserName"></option>
+                </select>
+            </td>
+            <td>
+                @*<select class="form-control" id="ProjectId" name="ProjectId">
+                    <option ng-repeat="project in allProjects" ng-bind="getProjectName(company.ProjectId)"></option>
+                </select>*@
+                <select class="form-control" id="ProjectId" name="ProjectId">
+                    <option ng-selected="company.ProjectId==project.Id" ng-repeat="project in allProjects" ng-bind="project.Name"></option>
+                </select>
+            </td>
+            <td class="form-group">
+                <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required."
+                       id="Date" name="Date" type="date" value="{{company.Date | date:'yyyy-MM-dd' }}">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field InvoicableHours must be a number."
+                       data-val-required="The InvoicableHours field is required." id="InvoicableHours" name="InvoicableHours"
+                       type="text" ng-value="company.InvoicableHours">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field ActualHours must be a number."
+                       data-val-required="The ActualHours field is required." id="ActualHours" name="ActualHours" type="text"
+                       ng-value="company.ActualHours">
+            </td>
+            <td>
+                <input ng-checked="company.Invoiced" class="check-box" data-val-required="The Invoiced field is required."
+                       id="Invoiced" name="Invoiced" type="checkbox" value="{{company.Invoiced}}">
+            </td>
+            <td>
+                @*<button class="btn btn-default" ng-click="saveEntry()">Save</button>*@
+                <a class="btn btn-default" href="/Entry/Edit/{{company.Id}}">Edit</a>
+                <a class="btn btn-default" href="/Entry/Details/{{company.Id}}">Details</a>
+                <a class="btn btn-default" href="/Entry/Delete/{{company.Id}}">Delete</a>
+                @*<input type="submit" value="Save" class="btn btn-default" />*@
+            </td>
+        </tr>
+    </table>
+
+@*<table class="table">
+    <tr>
+        <th>
+            Priority
+        </th>
+        <th>
+            To Do
+        </th>
+        <th>
+            Who
+        </th>
+        <th>
+            Project
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Hours Invoicable
+        </th>
+        <th>
+            Hours Actual
+        </th>
+        <th>
+            Invoiced
+        </th>
+    </tr>
+    <tr ng-repeat="company in companies">
+        <td ng-bind="company.Priority"></td>
+        <td ng-bind="company.Description"></td>
+        <td ng-bind="getUserName(company.UserId)"></td>
+        <td>projectname</td>
+        <td ng-bind="company.Date | date : format : mediumDate"></td>
+        <td ng-bind="company.InvoicableHours"></td>
+        <td ng-bind="company.ActualHours"></td>
+        <td ng-bind="company.Invoiced"></td>
+    </tr>
+</table>*@
+
+
+    @*<div ng-repeat="entry in allEntries">
+        <span ng-bind="entry.Description"></span>
+    </div>*@
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

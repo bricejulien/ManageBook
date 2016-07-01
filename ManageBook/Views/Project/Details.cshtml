@@ -1,0 +1,113 @@
+﻿@model ManageBookModels.Project
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Invoice)
+        </dt>
+
+        <dd>
+            $@Model.Invoice.ToString("#,##0.00")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPerson)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactPerson)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuickbookId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuickbookId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Retainer)
+        </dt>
+
+        <dd>
+            @if (Model.Retainer)
+            {
+                @Html.Raw("YES")
+            }
+            else
+            {
+                @Html.Raw("NO")
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Actions)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Actions)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Contacts)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Contacts)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Priority)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Priority)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
