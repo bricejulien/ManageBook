@@ -28,5 +28,7 @@ namespace ManageBook.Models
             modelBuilder.Entity<Entry>().HasKey<int>(x => x.Id);
             modelBuilder.Entity<Project>().HasKey<int>(x => x.Id);
         }
+
+        public System.Data.Entity.DbSet<ManageBookModels.Contact> Contacts { get; set; }
     }
 }

@@ -21,5 +21,7 @@ namespace ManageBookModels
         public int Actions { get; set; }
         public int Contacts { get; set; }
         public int Priority { get; set; }
+        public double Rate { get; set; }
+        public virtual ICollection<Contact> ListContacts { get; set; }
     }
 }

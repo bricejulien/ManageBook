@@ -15,7 +15,7 @@ app.config(['$routeProvider', '$locationProvider',
 ]);
 
 
-app.service('EntryService', ['$http', function ($http) {
+app.service('EntryService', ['$http', '$filter', function ($http) {
     this.getAllEntries = function ($scope) {
         return $http({
             method: "GET",

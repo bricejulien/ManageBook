@@ -19,6 +19,8 @@
         $scope.Invoiced = false;
         $scope.ProjectId = 1;
 
+        $scope.IdNewEntry = 0;
+
         var undefined;
 
         $scope.priorities = [
@@ -51,22 +53,7 @@
             //    'name': 'Cognizant Technologies',
             //    'employees': 100000,
             //    'headoffice': 'Bangalore'
-            //},
-            //{
-            //    'name': 'Wipro',
-            //    'employees': 115000,
-            //    'headoffice': 'Bangalore'
-            //},
-            //{
-            //    'name': 'Tata Consultancy Services (TCS)',
-            //    'employees': 150000,
-            //    'headoffice': 'Bangalore'
-            //},
-            //{
-            //    'name': 'HCL Technologies',
-            //    'employees': 90000,
-            //    'headoffice': 'Noida'
-            //},
+            //}
         ];
         $scope.addRow = function () {
             //$scope.companies.push({ 'name': $scope.name, 'employees': $scope.employees, 'headoffice': $scope.headoffice });
@@ -120,6 +107,14 @@
         };*/
 
         $scope.addEntry = function () {
+        $scope.newEntry.Priority = $scope.Priority;
+            $scope.newEntry.Description = $scope.Description;
+            $scope.newEntry.UserId = $scope.UserId;
+            $scope.newEntry.Date = $scope.Date;
+            $scope.newEntry.InvoicableHours = $scope.InvoicableHours;
+            $scope.newEntry.ActualHours = $scope.ActualHours;
+            $scope.newEntry.Invoiced = $scope.Invoiced;
+            $scope.newEntry.ProjectId = $scope.ProjectId;
             var data = {
                 "Priority": $scope.newEntry.Priority,
                 "Description": $scope.newEntry.Description,
@@ -130,7 +125,7 @@
                 "Invoiced": $scope.newEntry.Invoiced,
                 "ProjectId": $scope.newEntry.ProjectId
             };
-            $http.post(
+            var result = $http.post(
                 '/api/EntryAPI/PostEntry',
                 JSON.stringify(data),
                 {
@@ -139,10 +134,28 @@
                     }
                 }
             ).success(function (data) {
+                //$scope.IdNewEntry = data.Id;
+
                 angular.element(document.querySelector('#checkIconAdd')).css('visibility', 'visible');
                 $timeout(function () {
                     angular.element(document.querySelector('#checkIconAdd')).css('visibility', 'hidden');
                 }, 3000);
+
+                $scope.companies.push({
+                    'Priority': $scope.Priority, 'Description': $scope.Description, 'UserId': $scope.UserId,
+                    'Date': $scope.Date, 'InvoicableHours': $scope.InvoicableHours, 'ActualHours': $scope.ActualHours,
+                    'Invoiced': $scope.Invoiced, 'ProjectId': $scope.ProjectId, 'Id': data.Id
+                });
+                
+
+                $scope.Priority = $scope.priorities[0].value;
+                $scope.Description = '';
+                $scope.UserId = '';
+                $scope.Date = $scope.DateofToday;
+                $scope.InvoicableHours = '';
+                $scope.ActualHours = '';
+                $scope.Invoiced = false;
+                $scope.ProjectId = 1;
 
                 $scope.newEntry.Priority = 0;
                 $scope.newEntry.Description = "";

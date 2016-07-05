@@ -68,7 +68,7 @@ namespace ManageBook.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Invoice,ExpectedHours,ActualHours,ContactPerson,PhoneNumber,QuickbookId,Retainer,Actions,Contacts,Priority")] Project project)
+        public ActionResult Create([Bind(Include = "Id,Name,Invoice,ExpectedHours,ActualHours,ContactPerson,PhoneNumber,QuickbookId,Retainer,Actions,Contacts,Priority,Rate")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -105,7 +105,7 @@ namespace ManageBook.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Invoice,ExpectedHours,ActualHours,ContactPerson,PhoneNumber,QuickbookId,Retainer,Actions,Contacts,Priority")] Project project)
+        public ActionResult Edit([Bind(Include = "Id,Name,Invoice,ExpectedHours,ActualHours,ContactPerson,PhoneNumber,QuickbookId,Retainer,Actions,Contacts,Priority,Rate")] Project project)
         {
             if (ModelState.IsValid)
             {

@@ -224,10 +224,10 @@ namespace ManageBook.API_Controllers
                 filteredEntries = filteredEntries.Where(x => x.Priority != 4).ToList();
             }
 
-            if (filteredEntries.Count() == 0)
-            {
-                return InternalServerError();
-            }
+            //if (filteredEntries.Count() == 0)
+            //{
+            //    return InternalServerError();
+            //}
             return Ok(filteredEntries);
         }
     }

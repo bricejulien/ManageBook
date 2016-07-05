@@ -10,7 +10,7 @@ app.config(['$routeProvider', '$locationProvider',
         //$locationProvider.html5Mode(true);
     }
 ]);
-app.service('EntryService', ['$http', function ($http) {
+app.service('EntryService', ['$http', '$filter', function ($http) {
         this.getAllEntries = function ($scope) {
             return $http({
                 method: "GET",

@@ -58,7 +58,7 @@
             <th></th>
         </tr>
         <tr style="background-color: rgb(240, 248, 255);" ng-show="showRowNewProject">
-            <form class="form-horizontal" role="form" ng-submit="addRow()">
+            <form class="form-horizontal" role="form" ng-submit="addProject()">
                 <td>
                     <select class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
                         <option style="display:none" value=""></option>
@@ -98,12 +98,12 @@
                     <input type="hidden" id="ActualHours" name="ActualHours" ng-model="ActualHours" ng-init="ActualHours=0" />
                 </td>
                 <td style="width: 150px">
-                    <input class="form-control text-box single-line" id="Invoice" name="Invoice" type="text"
+                    <input style="visibility:hidden" class="form-control text-box single-line" id="Invoice" name="Invoice" type="text"
                            ng-model="Invoice" placeholder="Invoice" ng-init="Invoice=0">
                 </td>
                 <td>
                     <input type="submit" value="Add" class="btn btn-default" ng-show="(Name.length > 0)"
-                           ng-disabled="(Name.length > 0)" />
+                           ng-disabled="!(Name.length > 0)" />
                 </td>
                 <td>
                     <i class="fa fa-check checkIcon" id="checkIconAdd"
@@ -132,13 +132,14 @@
                 <input class="form-control text-box single-line" id="PhoneNumber" name="PhoneNumber" type="text"
                        ng-value="project.PhoneNumber" ng-model="project.PhoneNumber">
             </td>
-            <td ng-bind="project.QuickbookId"></td>
+            <td><a ng-bind="project.QuickbookId" href="localhost:8099/invoice/add/{{project.QuickbookId}}"></a></td>
             <td ng-show="project.Retainer">YES</td>
             <td ng-show="!(project.Retainer)">NO</td>
             <td ng-bind="project.Actions"></td>
             <td ng-bind="project.Contacts"></td>
             <td>{{project.ActualHours}}/{{project.ExpectedHours}}</td>
-            <td ng-bind="project.Invoice | currency"></td>
+            @*<td ng-bind="project.Invoice | currency"></td>*@
+            <td ng-bind="getInvoice(project.Id) | currency"></td>
             <td>
                 <button class="btn btn-default btn-blue" ng-click="saveProject(project.Id)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 @*<a class="btn btn-default" href="/Project/Edit/{{project.Id}}">Edit</a>*@

@@ -1,5 +1,6 @@
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\bin\Debug\ManageBookModels.dll
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\bin\Debug\ManageBookModels.pdb
+c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\obj\Debug\ManageBookModels.csprojResolveAssemblyReference.cache
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\obj\Debug\ManageBookModels.dll
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\obj\Debug\ManageBookModels.pdb
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\bin\Debug\ManageBook.dll
@@ -42,4 +43,3 @@ c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\bin\Debug\System.Web.WebPages.Razor.xml
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\bin\Debug\System.Web.WebPages.xml
 c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\bin\Debug\System.Web.WebPages.Deployment.xml
-c:\users\brice\documents\visual studio 2015\Projects\ManageBook\ManageBookModels\obj\Debug\ManageBookModels.csprojResolveAssemblyReference.cache
