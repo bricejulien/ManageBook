@@ -73,4 +73,18 @@ app.service('ProjectService', ['$http', function ($http) {
             ;
         };
     }]);
+app.service('ContactService', ['$http', function ($http) {
+        this.getAllContacts = function ($scope) {
+            return $http({
+                method: "GET",
+                url: "/api/ContactAPI/AllContacts?projectid=",
+                headers: { 'Content-Type': 'application/json' }
+            }).success(function (data) {
+                $scope.allContacts = data;
+            }).error(function (data) {
+                //console.log(data);
+            });
+            ;
+        };
+    }]);
 //# sourceMappingURL=ManageBookApp.js.map

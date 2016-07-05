@@ -201,6 +201,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API_Controllers\ContactAPIController.cs" />
     <Compile Include="API_Controllers\EntryAPIController.cs" />
     <Compile Include="API_Controllers\ProjectAPIController.cs" />
     <Compile Include="API_Controllers\UserAPIController.cs" />

@@ -1,17 +1,14 @@
 ﻿<div  ng-controller="EntryCtrl">
+    <table class="table">
+        <tr>
+            <td class="form-group">
+                <label for="searchKeyword">Search Entry</label>
+                <input type="text" class="text-box form-control single-line" name="searchKeyword" ng-model="searchKeyword" />
+            </td>
+        </tr>
+    </table>
 <table class="table">
-    <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
+
     <tr>
         <td>
             <select class="form-control" ng-model="filteredProject"
@@ -177,7 +174,7 @@
                 </td>
             </form>
         </tr>
-        <tr ng-repeat="company in companies | orderBy:sortType:sortReverse" @*ng-style="company.Invoiced && {'background-color':'rgb(240, 248, 255)'}"*@ ng-style="company.Invoiced ? { 'background-color':'rgb(240, 248, 255)' } : { 'background-color': '#ffffff' }">
+        <tr ng-repeat="company in companies | filter: {Description:searchKeyword} | orderBy:sortType:sortReverse" @*ng-style="company.Invoiced && {'background-color':'rgb(240, 248, 255)'}"*@ ng-style="company.Invoiced ? { 'background-color':'rgb(240, 248, 255)' } : { 'background-color': '#ffffff' }">
             @*<td>
                 <select ng-init="priority.value=company.Priority" class="form-control" id="Priority" name="Priority" ng-model="Priority" ng-options="priority.value as priority.name for priority in priorities">
                     <option style="display:none" value=""></option>

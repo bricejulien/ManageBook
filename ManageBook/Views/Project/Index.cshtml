@@ -1,5 +1,14 @@
 ﻿<div ng-controller="ProjectCtrl">
 
+    <table class="table">
+        <tr>
+            <td class="form-group">
+                <label for="searchKeyword">Search Client</label>
+                <input type="text" class="text-box form-control single-line" name="searchKeyword" ng-model="searchKeyword" />
+            </td>
+        </tr>
+    </table>
+
     <table class="table" style="background-color: #f9f9f9;" @*class="table table-striped" style="background-color: #DCDCDC;"*@>
         <tr>
             <th>
@@ -85,20 +94,20 @@
                            value="true" ng-model="Retainer">
                 </td>
                 <td style="width: 150px">
-                    <input class="form-control text-box single-line"  id="Actions" name="Actions" type="text"
+                    <input class="form-control text-box single-line"  id="Actions" name="Actions" type="hidden"
                            ng-model="Actions" placeholder="Actions" ng-init="Actions=0">
                 </td>
                 <td style="width: 150px">
-                    <input class="form-control text-box single-line" id="Contacts" name="Contacts" type="text"
+                    <input class="form-control text-box single-line" id="Contacts" name="Contacts" type="hidden"
                            ng-model="Contacts" placeholder="Contacts" ng-init="Contacts=0">
                 </td>
                 <td style="width: 150px">
-                    <input class="form-control text-box single-line" id="ExpectedHours" name="ExpectedHours" type="text"
+                    <input class="form-control text-box single-line" id="ExpectedHours" name="ExpectedHours" type="hidden"
                            ng-model="ExpectedHours" placeholder="Expected Hours" ng-init="ExpectedHours=0">
                     <input type="hidden" id="ActualHours" name="ActualHours" ng-model="ActualHours" ng-init="ActualHours=0" />
                 </td>
                 <td style="width: 150px">
-                    <input style="visibility:hidden" class="form-control text-box single-line" id="Invoice" name="Invoice" type="text"
+                    <input class="form-control text-box single-line" id="Invoice" name="Invoice" type="hidden"
                            ng-model="Invoice" placeholder="Invoice" ng-init="Invoice=0">
                 </td>
                 <td>
@@ -111,7 +120,7 @@
                 </td>
             </form>
         </tr>
-        <tr ng-repeat="project in allProjects | orderBy:sortType:sortReverse"
+        <tr ng-repeat="project in allProjects | filter: {Name:searchKeyword} | orderBy:sortType:sortReverse"
             ng-style="(project.Priority==4) ? { 'background-color':'rgb(240, 248, 255)' } : { 'background-color': '#ffffff' }">
             <td>
                 <select class="form-control" ng-model="selectedPriority"
@@ -136,14 +145,18 @@
             <td ng-show="project.Retainer">YES</td>
             <td ng-show="!(project.Retainer)">NO</td>
             <td ng-bind="project.Actions"></td>
-            <td ng-bind="project.Contacts"></td>
-            <td>{{project.ActualHours}}/{{project.ExpectedHours}}</td>
+            @*<td ng-bind="project.Contacts"></td>*@
+            <td ng-bind="getContacts(project.Id)"></td>
+            <td>@*<button ng-click="getContacts(project.Id)">getContacts</button>*@</td>
+            @*<td>{{project.ActualHours}}/{{project.ExpectedHours}}</td>*@
+            <td>{{getInvoicedHours(project.Id)}}/{{getTotalHours(project.Id)}}</td>
             @*<td ng-bind="project.Invoice | currency"></td>*@
             <td ng-bind="getInvoice(project.Id) | currency"></td>
             <td>
                 <button class="btn btn-default btn-blue" ng-click="saveProject(project.Id)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                 @*<a class="btn btn-default" href="/Project/Edit/{{project.Id}}">Edit</a>*@
-                <a class="btn btn-default btn-blue" href="/Project/Details/{{project.Id}}">Details</a>
+                @*<a class="btn btn-default btn-blue" href="/Project/Details/{{project.Id}}">Details</a>*@
+                <a class="btn btn-default btn-blue" href="/Entry?projectid={{project.Id}}">Details</a>
                 <a class="btn btn-default btn-blue" href="/Project/Delete/{{project.Id}}">@*<i class="fa fa-trash-o" aria-hidden="true"></i>*@Delete</a>
                 @*<input type="submit" value="Save" class="btn btn-default" />*@
             </td>

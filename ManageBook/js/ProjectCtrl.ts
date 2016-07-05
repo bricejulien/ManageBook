@@ -1,13 +1,16 @@
 ﻿angular.module("ManageBookApp").controller('ProjectCtrl', ['$scope', '$routeParams', '$http', '$window', '$location', '$timeout', 'EntryService',
-    'UserService', 'ProjectService', '$filter',
+    'UserService', 'ProjectService', 'ContactService', '$filter',
     function ($scope, $routeParams, $http, $window, $location, $timeout, EntryService,
-        UserService, ProjectService, $filter) {
+        UserService, ProjectService, ContactService, $filter) {
 
-        $scope.allProjects = {}
+        $scope.allProjects = {};
         ProjectService.getAllProjects($scope);
 
         $scope.allEntries = {};
         EntryService.getAllEntries($scope);
+
+        $scope.allContacts = {};
+        ContactService.getAllContacts($scope);
 
         $scope.detailProjectId = window.location.search.replace("?projectid=", "");
 
@@ -20,11 +23,11 @@
         var undefined;
 
         $scope.priorities = [
-            { name: 'X', value: 0 },
+            { name: '!!!', value: 0 },
             { name: '1', value: 1 },
             { name: '2', value: 2 },
             { name: '3', value: 3 },
-            { name: '!!!', value: 4 }
+            { name: 'X', value: 4 }
         ];
 
         $scope.Priority = $scope.priorities[0].value;
@@ -216,6 +219,53 @@
             return invoice;
         }
 
+        $scope.getTotalHours = function (id) {
+            var totalHours = 0.00;
+            var list = this.getEntriesProject(id);
+            for (var i = 1, len = list.length; i < len; i++) {
+                totalHours = totalHours + list[i].InvoicableHours;
+            }
+            return totalHours;
+        }
+
+        $scope.getInvoicedHours = function (id) {
+            var invoicedHours = 0.00;
+            var list = this.getEntriesProject(id);
+            for (var i = 1, len = list.length; i < len; i++) {
+                if (list[i].Invoiced) {
+                    invoicedHours = invoicedHours + (list[i].InvoicableHours);
+                }
+            }
+            return invoicedHours;
+        }
+
+        $scope.getContacts = function (id) {
+            var list = this.getContactsProject(id);
+            return list.length - 1;
+        }
+
+        
+
+        $scope.getEntriesProject = function (id) {
+            var list = [{}];
+            for (var i = 0, len = $scope.allEntries.length; i < len; i++) {
+                if ($scope.allEntries[i].ProjectId == id) {
+                    list.push($scope.allEntries[i]);
+                }
+            }
+            return list;
+        }
+
+        $scope.getContactsProject = function (id) {
+            var list = [{}];
+            for (var i = 0, len = $scope.allContacts.length; i < len; i++) {
+                if ($scope.allContacts[i].ProjectId == id) {
+                    list.push($scope.allContacts[i]);
+                }
+            }
+            return list;
+        }
+
         //$scope.getEntriesByProject = function (id) {
         //    var current = new Date();
         //    var startDate = new Date(current.getFullYear() - 40, 1, 1);
@@ -225,7 +275,7 @@
         //    if (typeof id == "undefined") {
         //        id = "undefined";
         //    }
-            
+
         //    var user = "undefined";
 
         //    return $http({
@@ -240,15 +290,5 @@
         //        //console.log(data);
         //    });;
         //};
-
-        $scope.getEntriesProject = function (id) {
-            var list = [{}];
-            for (var i = 0, len = $scope.allEntries.length; i < len; i++) {
-                if ($scope.allEntries[i].ProjectId == id) {
-                    list.push($scope.allEntries[i]);
-                }
-            }
-            return list;
-        }
         
     }]);

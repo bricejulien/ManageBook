@@ -24,11 +24,11 @@
         var undefined;
 
         $scope.priorities = [
-            { name: 'X', value: 0 },
+            { name: '!!!', value: 0 },
             { name: '1', value: 1 },
             { name: '2', value: 2 },
             { name: '3', value: 3 },
-            { name: '!!!', value: 4 }
+            { name: 'X', value: 4 }
         ];
         //$scope.priorities = [0,1,2,3,4];
         $scope.Priority = $scope.priorities[0].value;
